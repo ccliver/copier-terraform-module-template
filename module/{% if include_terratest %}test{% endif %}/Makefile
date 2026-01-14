@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := help
 
 init: ## Initialize the module
-	go mod init {{module_name}}
+	go mod init github.com/{{github_user_name}}/{{module_full_name}}
 	go mod tidy
 
 test: ## Run the tests
