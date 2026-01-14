@@ -7,9 +7,15 @@ aws_provider_version:
 
 module_name:
   type: str
-  help: What is your Terraform module name (terraform-aws-something)?
+  help: Module name (e.g., 'vpc', 'eks-cluster')
+  validator: "{% if not module_name.replace('-', '').replace('_', '').isalnum() %}Use only letters, numbers, hyphens, and underscores{% endif %}"
 
-descripition:
+module_full_name:
+  type: str
+  default: "terraform-aws-{{ module_name }}"
+  when: false
+
+description:
   type: str
   help: A short description of your Terraform module.
 
@@ -29,9 +35,14 @@ copyright_holder:
 copyright_year:
   type: str
   help: The copyright year
-  default: 2026
+  default: {{now().year}}
 
 include_terratest:
   type: bool
   help: Whether to include Terratest skeleton
+  default: true
+
+include_examples:
+  type: bool
+  help: Include examples directory?
   default: true

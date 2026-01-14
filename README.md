@@ -2,5 +2,5 @@
 
 ## Usage
 ```bash
-copier copy https://github.com/ccliver/copier-terraform-module-template/tree/main ./terraform-aws-module-name
+copier copy https://github.com/ccliver/copier-terraform-module-template ./terraform-aws-module-name
 ```
