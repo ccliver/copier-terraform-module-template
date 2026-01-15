@@ -19,7 +19,7 @@ description:
   type: str
   help: A short description of your Terraform module.
 
-author_fullname:
+author_full_name:
   type: str
   help: Your full name
 
@@ -30,12 +30,12 @@ github_user_name:
 copyright_holder:
   type: str
   help: The name of the organization or individual holding the copyright
-  default: '{{author_fullname}}'
+  default: '{{author_full_name}}'
 
 copyright_year:
   type: str
   help: The copyright year
-  default: {{now().year}}
+  default: 2026
 
 include_terratest:
   type: bool
