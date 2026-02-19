@@ -35,7 +35,8 @@ Copier will prompt for the following inputs:
 terraform-aws-<module-name>/
 ├── .github/
 │   └── workflows/
-│       └── ci.yml           # PR workflow: runs pre-commit on changed files
+│       ├── ci.yml           # PR workflow: runs pre-commit on changed files
+│       └── release.yml      # Release workflow: semantic-release on push to main
 ├── .gitignore
 ├── .pre-commit-config.yaml  # terraform_fmt, validate, docs, tflint, trivy
 ├── .tflint.hcl              # TFLint with the AWS ruleset
