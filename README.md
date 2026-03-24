@@ -38,7 +38,7 @@ terraform-aws-<module-name>/
 │       ├── ci.yml           # PR workflow: runs pre-commit on changed files
 │       └── release.yml      # Release workflow: semantic-release on push to main
 ├── .gitignore
-├── .pre-commit-config.yaml  # terraform_fmt, validate, docs, tflint, trivy
+├── .pre-commit-config.yaml  # terraform_fmt, validate, docs, tflint
 ├── .tflint.hcl              # TFLint with the AWS ruleset
 ├── LICENSE                  # MIT license
 ├── main.tf
@@ -64,7 +64,6 @@ A GitHub Actions workflow triggers on every pull request and runs `pre-commit` a
 | `terraform_validate` | Validate configuration syntax |
 | `terraform_docs` | Auto-generate and update module documentation |
 | `terraform_tflint` | Lint against AWS best-practice rules |
-| `terraform_trivy` | Scan for MEDIUM/HIGH/CRITICAL security misconfigurations |
 | `check-merge-conflict` | Catch unresolved merge conflict markers |
 | `end-of-file-fixer` | Ensure files end with a newline |
 
