@@ -3,43 +3,30 @@ name: CI
 on:
   pull_request:
 
+permissions: {}
+
 jobs:
   pre-commit:
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/antonbabenko/pre-commit-terraform:v1.105.0
-    defaults:
-      run:
-        shell: bash
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
-          fetch-depth: 0
-          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
 
-      - run: |
-          git config --global --add safe.directory $GITHUB_WORKSPACE
-          git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
+      - uses: hashicorp/setup-terraform@5e8dbf3c6d9deaf4193ca7a8fb23f2ac83bb6c85 # v4.0.0
 
-      - name: Get changed files
-        id: file_changes
+      - uses: terraform-linters/setup-tflint@b480b8fcdaa6f2c577f8e4fa799e89e756bb7c93 # v6.2.2
+
+      - name: Install terraform-docs
         run: |
-          export DIFF=$(git diff --name-only origin/${{ github.base_ref }} ${{ github.sha }})
-          echo "Diff between ${{ github.base_ref }} and ${{ github.sha }}"
-          echo "files=$( echo "$DIFF" | xargs echo )" >> $GITHUB_OUTPUT
+          curl -Lo /tmp/terraform-docs.tar.gz https://github.com/terraform-docs/terraform-docs/releases/download/v0.19.0/terraform-docs-v0.19.0-linux-amd64.tar.gz
+          tar -xzf /tmp/terraform-docs.tar.gz -C /tmp
+          sudo mv /tmp/terraform-docs /usr/local/bin/
 
-      - name: fix tar dependency in alpine container image
-        run: |
-          apk --no-cache add tar
-          # check python modules installed versions
-          python -m pip freeze --local
+      - name: Initialize tflint plugins
+        run: tflint --init
 
-      - name: Cache pre-commit since we use pre-commit from container
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/pre-commit
-          key: pre-commit-3|${{ hashFiles('.pre-commit-config.yaml') }}
+      - uses: astral-sh/setup-uv@cec208311dfd045dd5311c1add060b2062131d57 # v8.0.0
 
       - name: Execute pre-commit
-        run: |
-          pre-commit run --color=always --show-diff-on-failure --files ${{ steps.file_changes.outputs.files }}
+        run: uvx pre-commit run --all-files --show-diff-on-failure --color=always
